@@ -310,8 +310,13 @@
       });
     }
 
-    function setupSaveButton() {
-      const saveButton = document.getElementById('save-button');
+function setupSaveButton() {
+  const saveButton = document.getElementById('save-button');
+  saveButton.addEventListener('click', () => {
+    window.print();
+  });
+}
+
 
       saveButton.addEventListener('click', async () => {
         if (isSaving) return;
