@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="de" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbeitsblatt: Geschäftsprozesse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+    .worksheet-container { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .content-card { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); }
+    .section-header { border-left: 4px solid #667eea; padding-left: 16px; margin-bottom: 20px; }
+
+    .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .info-table th, .info-table td { padding: 12px; text-align: left; border: 2px solid #e5e7eb; }
+    .info-table th { background-color: #f3f4f6; font-weight: 600; }
+
+    .process-step {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .textarea-field { min-height: 100px; resize: vertical; }
+
+    .process-option {
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 12px;
+      background: white;
+    }
+    .process-option:hover { border-color: #667eea; background: #f9fafb; }
+    .process-option.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      font-weight: 600;
+    }
+
+    .save-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+    }
+    .save-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    .save-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s;
+      z-index: 1000;
+      white-space: pre-line;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .emoji-icon { font-size: 24px; margin-right: 8px; }
+    .checkmark { color: #10b981; font-size: 20px; margin-right: 4px; }
+  </style>
+</head>
+
+<body class="h-full overflow-auto">
+  <div class="worksheet-container h-full w-full p-8">
+    <div class="content-card max-w-4xl mx-auto p-8">
+      <div class="text-center mb-8">
+        <h1 id="worksheet-title" class="text-4xl font-bold mb-4" style="color: #667eea;">
+          Arbeitsblatt: Geschäftsprozesse verstehen und anwenden
+        </h1>
+        <p id="learning-goal" class="text-lg text-gray-700">
+          <span class="emoji-icon">🎯</span><strong>Lernziel:</strong>
+          Die Schüler*innen verstehen die grundlegenden Elemente eines Geschäftsprozesses und können diese auf einen beliebigen Prozess anwenden.
+        </p>
+      </div>
+
+      <div class="mb-6 grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-gray-700">Name:</label>
+          <input type="text" id="student-name" class="input-field" placeholder="Dein Name">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-gray-700">Datum:</label>
+          <input type="date" id="date" class="input-field">
+        </div>
+      </div>
+
+      <div class="section-header mb-6">
+        <h2 class="text-2xl font-bold text-gray-800"><span class="emoji-icon">📖</span>Teil 1: Grundlagen</h2>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">Was ist ein Prozess?</h3>
+        <p class="text-gray-700 mb-4">Ein Prozess ist eine strukturierte Abfolge von Tätigkeiten, die ein bestimmtes Ergebnis erzeugt.</p>
+        <p class="text-gray-700 mb-2 font-semibold">Jeder Prozess hat:</p>
+        <ul class="text-gray-700 ml-6 space-y-1">
+          <li><span class="checkmark">✓</span>einen Startpunkt</li>
+          <li><span class="checkmark">✓</span>mehrere Schritte</li>
+          <li><span class="checkmark">✓</span>einen Endpunkt</li>
+          <li><span class="checkmark">✓</span>ein Ergebnis</li>
+        </ul>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">Warum beschreibt man Prozesse?</h3>
+        <p class="text-gray-700 mb-4">Im Qualitätsmanagement ist es wichtig, dass Abläufe:</p>
+        <table class="info-table">
+          <thead>
+            <tr><th>Eigenschaft</th><th>Bedeutung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="checkmark">✓</span>klar beschrieben</td><td>Jeder versteht, was zu tun ist</td></tr>
+            <tr><td><span class="checkmark">✓</span>nachvollziehbar</td><td>Man kann jeden Schritt zurückverfolgen</td></tr>
+            <tr><td><span class="checkmark">✓</span>wiederholbar</td><td>Das gleiche Ergebnis kann erneut erzielt werden</td></tr>
+            <tr><td><span class="checkmark">✓</span>überprüfbar</td><td>Man kann kontrollieren, ob alles richtig läuft</td></tr>
+          </tbody>
+        </table>
+        <p class="text-gray-700 italic">Nur so kann Qualität dauerhaft gesichert werden.</p>
+      </div>
+
+      <div class="section-header mb-6">
+        <h2 class="text-2xl font-bold text-gray-800"><span class="emoji-icon">🧩</span>Teil 2: Die 7 Bausteine eines Prozesses</h2>
+      </div>
+
+      <div class="space-y-4 mb-8">
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">1. 🎯 Prozessaufgabe</h4>
+          <p class="mb-1">Die Hauptaufgabe oder das Ziel des Prozesses</p>
+          <p class="text-sm opacity-90">Frage: Wozu gibt es diesen Prozess?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">2. 🔧 Ressourcen</h4>
+          <p class="mb-1">Alles, was benötigt wird, um den Prozess durchzuführen:</p>
+          <ul class="text-sm ml-4 opacity-90">
+            <li>• Materialien</li><li>• Personal</li><li>• Maschinen oder Geräte</li><li>• Hilfsmittel</li>
+          </ul>
+          <p class="text-sm opacity-90 mt-1">Frage: Womit wird gearbeitet? Wer arbeitet?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">3. 📋 Verfahren / Prozessschritte</h4>
+          <p class="mb-1">Die Einzelschritte, die nacheinander ausgeführt werden</p>
+          <p class="text-sm opacity-90">Frage: Was passiert Schritt für Schritt?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">4. 📥 Prozesseingabe (Input)</h4>
+          <p class="mb-1">Alles, was vorhanden sein muss, bevor der Prozess starten kann</p>
+          <p class="text-sm opacity-90">Frage: Was muss bereitstehen, damit der Prozess beginnen kann?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">5. ▶️ Startereignis</h4>
+          <p class="mb-1">Das Ereignis, das den Prozess auslöst</p>
+          <p class="text-sm opacity-90">Frage: Was bringt den Prozess in Gang?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">6. ⏹️ Endereignis</h4>
+          <p class="mb-1">Das Ereignis, das zeigt, dass der Prozess abgeschlossen ist</p>
+          <p class="text-sm opacity-90">Frage: Woran erkennt man, dass der Prozess fertig ist?</p>
+        </div>
+        <div class="process-step">
+          <h4 class="text-lg font-semibold mb-2">7. 📤 Prozessergebnis (Output)</h4>
+          <p class="mb-1">Das konkrete Ergebnis, das am Ende entsteht</p>
+          <p class="text-sm opacity-90">Frage: Was kommt am Ende heraus?</p>
+        </div>
+      </div>
+
+      <div class="section-header mb-6">
+        <h2 class="text-2xl font-bold text-gray-800"><span class="emoji-icon">✍️</span>Teil 3: Praktische Übung</h2>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">Aufgabe: Wähle einen der folgenden Prozesse aus:</h3>
+        <div id="process-options">
+          <div class="process-option" data-process="Pizza backen">🍕 Pizza backen</div>
+          <div class="process-option" data-process="Hausaufgaben erledigen">📚 Hausaufgaben erledigen</div>
+          <div class="process-option" data-process="Auto waschen">🚗 Auto waschen</div>
+          <div class="process-option" data-process="Kaffee kochen">☕ Kaffee kochen</div>
+          <div class="process-option" data-process="Kuchen backen">🎂 Kuchen backen</div>
+        </div>
+        <p class="mt-4 text-gray-700">
+          <strong>Mein gewählter Prozess:</strong>
+          <span id="selected-process-display" class="text-purple-600 font-semibold">Noch nicht ausgewählt</span>
+        </p>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Beschreibe deinen Prozess:</h3>
+        <table class="info-table">
+          <thead>
+            <tr><th style="width:30%;">Baustein</th><th>Beschreibung</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-semibold">1. Prozessaufgabe</td>
+              <td><input type="text" id="prozessaufgabe" class="input-field" placeholder="Beschreibe die Hauptaufgabe..."></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">2. Ressourcen</td>
+              <td><textarea id="ressourcen" class="input-field textarea-field" placeholder="Liste alle benötigten Ressourcen auf..."></textarea></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">3. Verfahren / Prozessschritte</td>
+              <td><textarea id="verfahren" class="input-field textarea-field" placeholder="1. Erster Schritt&#10;2. Zweiter Schritt&#10;3. ..."></textarea></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">4. Prozesseingabe (Input)</td>
+              <td><textarea id="prozesseingabe" class="input-field textarea-field" placeholder="Was muss vorhanden sein?"></textarea></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">5. Startereignis</td>
+              <td><input type="text" id="startereignis" class="input-field" placeholder="Was löst den Prozess aus?"></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">6. Endereignis</td>
+              <td><input type="text" id="endereignis" class="input-field" placeholder="Woran erkennt man das Ende?"></td>
+            </tr>
+            <tr>
+              <td class="font-semibold">7. Prozessergebnis (Output)</td>
+              <td><input type="text" id="prozessergebnis" class="input-field" placeholder="Was ist das Endergebnis?"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-header mb-6">
+        <h2 class="text-2xl font-bold text-gray-800"><span class="emoji-icon">🤔</span>Reflexionsfragen</h2>
+      </div>
+
+      <div class="mb-6 space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-gray-700">1. Welcher Baustein war am einfachsten zu beschreiben? Warum?</label>
+          <textarea id="reflection1" class="input-field textarea-field" placeholder="Deine Antwort..."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-gray-700">2. Welcher Baustein war am schwierigsten? Warum?</label>
+          <textarea id="reflection2" class="input-field textarea-field" placeholder="Deine Antwort..."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2 text-gray-700">3. Warum ist es wichtig, Prozesse genau zu beschreiben?</label>
+          <textarea id="reflection3" class="input-field textarea-field" placeholder="Deine Antwort..."></textarea>
+        </div>
+      </div>
+
+      <button id="save-button" class="save-button">💾 Arbeitsblatt speichern</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let selectedProcess = '';
+    let isSaving = false;
+
+    function initApp() {
+      // Datum vorbelegen
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date').value = today;
+
+      setupProcessSelection();
+      setupSaveButton();
+    }
+
+    function setupProcessSelection() {
+      const options = document.querySelectorAll('.process-option');
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          options.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedProcess = option.dataset.process || '';
+          document.getElementById('selected-process-display').textContent = selectedProcess || 'Noch nicht ausgewählt';
+        });
+      });
+    }
+
+    function setupSaveButton() {
+      const saveButton = document.getElementById('save-button');
+
+      saveButton.addEventListener('click', async () => {
+        if (isSaving) return;
+
+        const studentName = document.getElementById('student-name').value.trim();
+        const date = document.getElementById('date').value;
+
+        if (!studentName) { showToast('Bitte gib deinen Namen ein.', false); return; }
+        if (!selectedProcess) { showToast('Bitte wähle einen Prozess aus.', false); return; }
+
+        const prozessaufgabe = document.getElementById('prozessaufgabe').value.trim();
+        if (!prozessaufgabe) { showToast('Bitte fülle mindestens die Prozessaufgabe aus.', false); return; }
+
+        isSaving = true;
+        saveButton.disabled = true;
+        saveButton.textContent = '💾 Speichere...';
+
+        const worksheetData = {
+          student_name: studentName,
+          date: date,
+          selected_process: selectedProcess,
+          prozessaufgabe: document.getElementById('prozessaufgabe').value.trim(),
+          ressourcen: document.getElementById('ressourcen').value.trim(),
+          verfahren: document.getElementById('verfahren').value.trim(),
+          prozesseingabe: document.getElementById('prozesseingabe').value.trim(),
+          startereignis: document.getElementById('startereignis').value.trim(),
+          endereignis: document.getElementById('endereignis').value.trim(),
+          prozessergebnis: document.getElementById('prozessergebnis').value.trim(),
+          reflection1: document.getElementById('reflection1').value.trim(),
+          reflection2: document.getElementById('reflection2').value.trim(),
+          reflection3: document.getElementById('reflection3').value.trim(),
+          completed_at: new Date().toISOString()
+        };
+
+        try {
+          const key = `arbeitsblatt_prozess_${studentName}_${date}_${selectedProcess}`
+            .replace(/[^\w\-]+/g, "_");
+
+          // 1) Lokal im Browser speichern
+          localStorage.setItem(key, JSON.stringify(worksheetData));
+
+          // 2) Zusätzlich als JSON-Datei herunterladen
+          const blob = new Blob([JSON.stringify(worksheetData, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${key}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+
+          showToast("✓ Gespeichert (Browser) + Datei heruntergeladen!", true);
+        } catch (e) {
+          console.error(e);
+          showToast("Fehler beim lokalen Speichern.", false);
+        }
+
+        isSaving = false;
+        saveButton.disabled = false;
+        saveButton.textContent = '💾 Arbeitsblatt speichern';
+      });
+    }
+
+    function showToast(message, success) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.background = success ? '#10b981' : '#ef4444';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
