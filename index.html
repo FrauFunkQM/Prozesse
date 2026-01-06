@@ -285,14 +285,16 @@
 
   <div id="toast" class="toast"></div>
 
+    <div id="toast" class="toast"></div>
+
   <script>
     let selectedProcess = '';
-    let isSaving = false;
 
     function initApp() {
       // Datum vorbelegen
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('date').value = today;
+      const dateEl = document.getElementById('date');
+      if (dateEl) dateEl.value = today;
 
       setupProcessSelection();
       setupSaveButton();
@@ -304,80 +306,30 @@
         option.addEventListener('click', () => {
           options.forEach(opt => opt.classList.remove('selected'));
           option.classList.add('selected');
+
           selectedProcess = option.dataset.process || '';
-          document.getElementById('selected-process-display').textContent = selectedProcess || 'Noch nicht ausgewählt';
+          const display = document.getElementById('selected-process-display');
+          if (display) display.textContent = selectedProcess || 'Noch nicht ausgewählt';
         });
       });
     }
 
-function setupSaveButton() {
-  const saveButton = document.getElementById('save-button');
-  saveButton.addEventListener('click', () => {
-    window.print();
-  });
-}
+    function setupSaveButton() {
+      const saveButton = document.getElementById('save-button');
 
-
-      saveButton.addEventListener('click', async () => {
-        if (isSaving) return;
-
+      saveButton.addEventListener('click', () => {
         const studentName = document.getElementById('student-name').value.trim();
-        const date = document.getElementById('date').value;
-
-        if (!studentName) { showToast('Bitte gib deinen Namen ein.', false); return; }
-        if (!selectedProcess) { showToast('Bitte wähle einen Prozess aus.', false); return; }
-
-        const prozessaufgabe = document.getElementById('prozessaufgabe').value.trim();
-        if (!prozessaufgabe) { showToast('Bitte fülle mindestens die Prozessaufgabe aus.', false); return; }
-
-        isSaving = true;
-        saveButton.disabled = true;
-        saveButton.textContent = '💾 Speichere...';
-
-        const worksheetData = {
-          student_name: studentName,
-          date: date,
-          selected_process: selectedProcess,
-          prozessaufgabe: document.getElementById('prozessaufgabe').value.trim(),
-          ressourcen: document.getElementById('ressourcen').value.trim(),
-          verfahren: document.getElementById('verfahren').value.trim(),
-          prozesseingabe: document.getElementById('prozesseingabe').value.trim(),
-          startereignis: document.getElementById('startereignis').value.trim(),
-          endereignis: document.getElementById('endereignis').value.trim(),
-          prozessergebnis: document.getElementById('prozessergebnis').value.trim(),
-          reflection1: document.getElementById('reflection1').value.trim(),
-          reflection2: document.getElementById('reflection2').value.trim(),
-          reflection3: document.getElementById('reflection3').value.trim(),
-          completed_at: new Date().toISOString()
-        };
-
-        try {
-          const key = `arbeitsblatt_prozess_${studentName}_${date}_${selectedProcess}`
-            .replace(/[^\w\-]+/g, "_");
-
-          // 1) Lokal im Browser speichern
-          localStorage.setItem(key, JSON.stringify(worksheetData));
-
-          // 2) Zusätzlich als JSON-Datei herunterladen
-          const blob = new Blob([JSON.stringify(worksheetData, null, 2)], { type: "application/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `${key}.json`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-
-          showToast("✓ Gespeichert (Browser) + Datei heruntergeladen!", true);
-        } catch (e) {
-          console.error(e);
-          showToast("Fehler beim lokalen Speichern.", false);
+        if (!studentName) {
+          showToast('Bitte gib deinen Namen ein.', false);
+          return;
+        }
+        if (!selectedProcess) {
+          showToast('Bitte wähle einen Prozess aus.', false);
+          return;
         }
 
-        isSaving = false;
-        saveButton.disabled = false;
-        saveButton.textContent = '💾 Arbeitsblatt speichern';
+        // PDF speichern (Druckdialog -> "Als PDF speichern")
+        window.print();
       });
     }
 
