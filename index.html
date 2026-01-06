@@ -363,12 +363,28 @@
     };
 
     async function initApp() {
-      if (window.dataSdk) {
-        const initResult = await window.dataSdk.init(dataHandler);
-        if (!initResult.isOk) {
-          console.error("Failed to initialize data SDK");
-        }
-      }
+   try {
+  // 1) localStorage speichern
+  const key = `arbeitsblatt_prozess_${studentName}_${date}_${selectedProcess}`.replace(/\s+/g, "_");
+  localStorage.setItem(key, JSON.stringify(worksheetData));
+
+  // 2) zusätzlich als Datei herunterladen (JSON)
+  const blob = new Blob([JSON.stringify(worksheetData, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${key}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  showToast("✓ Gespeichert (Browser) + Datei heruntergeladen!", true);
+} catch (e) {
+  console.error(e);
+  showToast("Fehler beim Speichern (localStorage/Download).", false);
+}
+
 
       if (window.elementSdk) {
         await window.elementSdk.init({
